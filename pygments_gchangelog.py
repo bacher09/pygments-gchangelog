@@ -7,24 +7,27 @@ from pygments import highlight
 import re
 from collections import deque
 
+
 DATE_RE = r'\d\d? [A-Z][a-z]{2} \d{4}'
 EMAIL_RE = r'[\w\.\-\+]+@(?:[\w\-]+\.)+\w+'
 LINK_RE = r'https?:\/\/(?:[\w\-]+\.)+\w+(:?\/[\w\/\.\-\_\+\&\%\?#=]+)?'
-BUG_NUM_RE =  r'(\d+)'
+BUG_NUM_RE = r'(\d+)'
 bugnum_re = re.compile(BUG_NUM_RE)
 
-ARCHES = [ u'alpha', u'amd64', u'amd64-fbsd', u'amd64-linux', u'arm',
-           u'arm-linux', u'hppa', u'hppa-hpux', u'ia64', u'ia64-hpux',
-           u'ia64-linux', u'm68k', u'm68k-mint', u'mips', u'ppc', u'ppc-aix',
-           u'ppc-macos', u'ppc-openbsd', u'ppc64', u's390', u'sh', u'sparc',
-           u'sparc-fbsd', u'sparc-solaris', u'sparc64-solaris', u'x64-freebsd',
-           u'x64-macos', u'x64-openbsd', u'x64-solaris', u'x86', u'x86-fbsd',
-           u'x86-freebsd', u'x86-interix', u'x86-linux', u'x86-macos',
-           u'x86-netbsd', u'x86-openbsd', u'x86-solaris', u'x86-winnt' ]
+
+ARCHES = [
+    'alpha', 'amd64', 'amd64-fbsd', 'amd64-linux', 'arm', 'arm-linux', 'hppa',
+    'hppa-hpux', 'ia64', 'ia64-hpux', 'ia64-linux', 'm68k', 'm68k-mint',
+    'mips', 'ppc', 'ppc-aix', 'ppc-macos', 'ppc-openbsd', 'ppc64', 's390',
+    'sh', 'sparc', 'sparc-fbsd', 'sparc-solaris', 'sparc64-solaris',
+    'x64-freebsd', 'x64-macos', 'x64-openbsd', 'x64-solaris', 'x86',
+    'x86-fbsd', 'x86-freebsd', 'x86-interix', 'x86-linux', 'x86-macos',
+    'x86-netbsd', 'x86-openbsd', 'x86-solaris', 'x86-winnt'
+]
+
 
 KEYWORD_RE = r'[-~]?(?:%s)' % '|'.join(map(re.escape, ARCHES))
 
-# Literal.Date
 
 Date = Literal.Date
 PackageName = Name.Namespace
@@ -36,6 +39,7 @@ AuthorName = Name.Variable
 Bug = String
 Link = Keyword
 
+
 class ChangelogLexer(RegexLexer):
     "Pygments changelog lexer"
 
@@ -45,10 +49,19 @@ class ChangelogLexer(RegexLexer):
 
     tokens = {
         'root': [
-            (r'^# .*\n', Comment.Single), # Comment
-            (r'^(\*)(.+)( )(\()(%s)(\))' % DATE_RE, bygroups(Operator, PackageName, Whitespace, Punctuation, Date, Punctuation)),
-            (r'^(  )(%(date)s)(;)( +)([^<]*)(<)(%(email)s)(>)' % {'date': DATE_RE, 'email': EMAIL_RE},
-                bygroups(Whitespace, Date, Punctuation, Whitespace, AuthorName, Punctuation, Number, Punctuation), 'main'), # Date
+            (r'^# .*\n', Comment.Single),  # Comment
+            (
+                r'^(\*)(.+)( )(\()(%s)(\))' % DATE_RE,
+                bygroups(Operator, PackageName, Whitespace, Punctuation,
+                         Date, Punctuation)
+            ),
+            (
+                r'^(  )(%(date)s)(;)( +)([^<]*)(<)(%(email)s)(>)' %
+                {'date': DATE_RE, 'email': EMAIL_RE},
+                bygroups(Whitespace, Date, Punctuation, Whitespace, AuthorName,
+                         Punctuation, Number, Punctuation),
+                'main'
+            ),  # Date
             include('email'),
             (r' ', Whitespace),
             include('bugs'),
@@ -61,7 +74,7 @@ class ChangelogLexer(RegexLexer):
         ],
         'main': [
             (r' *\n\n', Punctuation, '#pop'),
-            (EMAIL_RE, Email), 
+            (EMAIL_RE, Email),
             (r'(,| |  )(\+[\w\.\-\+\/]+)', bygroups(Punctuation, FilePlus)),
             (r'(,| |  )(\-[\w\.\-\+\/]+)', bygroups(Punctuation, FileMinus)),
             (r'(,| |  )([\w\*][\w\.\-\+\/]+)', bygroups(Punctuation, File)),
@@ -84,18 +97,19 @@ class ChangelogLexer(RegexLexer):
             (r' +', Whitespace),
             (r'.', Generic),
         ],
-        'bugs' : [
+        'bugs': [
             (r'(?i)bug #\d+', Bug),
             (r'#\d+', Bug),
             (r'(?i)bug \d+', Bug),
         ],
         'email': [
-            (EMAIL_RE, Email), 
+            (EMAIL_RE, Email),
         ],
         'link': [
             (LINK_RE, Link),
         ]
     }
+
 
 class ChangelogHtmlFormater(HtmlFormatter):
     "Pygments html changelog formater"
@@ -133,7 +147,7 @@ class ChangelogHtmlFormater(HtmlFormatter):
                     if lspan != cspan:
                         line += (lspan and '</span>') + cspan + part + \
                                 (cspan and '</span>') + lsep
-                    else: # both are the same
+                    else:  # both are the same
                         line += part + (lspan and '</span>') + lsep
                     yield 1, line
                     line = ''
@@ -149,7 +163,7 @@ class ChangelogHtmlFormater(HtmlFormatter):
                     line += (lspan and '</span>') + cspan + last
                     lspan = cspan
                 else:
-                    line += last 
+                    line += last
             elif last:
                 line = cspan + last
                 lspan = cspan
@@ -175,6 +189,7 @@ class ChangelogHtmlFormater(HtmlFormatter):
                 format(name, ciavc_link(name))
         return value
 
+
 class ChangelogStyle(Style):
     "Pygments style for gentoo changelog"
 
@@ -192,21 +207,31 @@ class ChangelogStyle(Style):
         #Error:                  'bold underline #F00',
     }
 
+
 def changelog_highlight(text):
     "Shortcut for generating highlighted changelog html output"
-    return highlight(text, ChangelogLexer(), 
-                     ChangelogHtmlFormater(style = ChangelogStyle))
+    return highlight(
+        text,
+        ChangelogLexer(),
+        ChangelogHtmlFormater(style=ChangelogStyle)
+    )
+
 
 def changelog_termial_highlight(text):
     """Shortcut for generating highlighted terminal changelog  output
     Used for debuging lexer """
-    return highlight(text, ChangelogLexer(), 
-                     Terminal256Formatter(style = ChangelogStyle))
+    return highlight(
+        text,
+        ChangelogLexer(),
+        Terminal256Formatter(style=ChangelogStyle)
+    )
+
 
 def changelog_style_css():
     "Shortcut for generating css style for pygments `ChangelogStyle`"
-    f = ChangelogHtmlFormater(style = ChangelogStyle)
+    f = ChangelogHtmlFormater(style=ChangelogStyle)
     return f.get_style_defs()
+
 
 def group_tokens(text):
     """Combine tokens to groups.
@@ -222,12 +247,11 @@ def group_tokens(text):
     """
     c = ChangelogLexer()
     queue = deque()
-    group_type = None 
+    group_type = None
     group = []
     for token, value in c.get_tokens(text):
         queue.append((token, value))
-
-        if len(queue)>6:
+        if len(queue) > 6:
             token_q, value_q = queue[0]
             if token_q == Operator and value_q == '*':
                 yield (group_type, group)
@@ -246,6 +270,7 @@ def group_tokens(text):
 
     yield (group_type, group + list(queue))
 
+
 def latest_message_group(text):
     """Args:
         text - changelog text
@@ -253,6 +278,7 @@ def latest_message_group(text):
     for group_type, group in group_tokens(text):
         if group_type == 'message':
             return group
+
 
 def latest_group_messages_group(text):
     groups = []
@@ -263,11 +289,13 @@ def latest_group_messages_group(text):
             groups.append((group_type, group))
             return groups
 
+
 def tokensgroup_to_toknes(groups):
     tk = []
     for group_type, group in groups:
         tk += group
     return tk
+
 
 def tokens_to_text(lex):
     "Convert tokenized input to text"
@@ -276,12 +304,13 @@ def tokens_to_text(lex):
         mystr += value
     return mystr
 
+
 def latest_message(text):
     "Return latest message text"
     return tokens_to_text(latest_message_group(text))
+
 
 def latest_group_messages(text):
     "Returns latest messages like it done on packages.gentoo.org"
     groups = latest_group_messages_group(text)
     return tokens_to_text(tokensgroup_to_toknes(groups))
-
