@@ -6,7 +6,6 @@ from pygments.token import *
 from pygments import highlight
 import re
 from collections import deque
-from ..utils import ciavc_link
 
 DATE_RE = r'\d\d? [A-Z][a-z]{2} \d{4}'
 EMAIL_RE = r'[\w\.\-\+]+@(?:[\w\-]+\.)+\w+'

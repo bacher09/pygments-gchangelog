@@ -30,6 +30,12 @@ setup(
     install_requires=[
         'pygments'
     ],
+    entry_points="""
+    [pygments.lexers]
+    chagelog = pygments_gchangelog:ChangelogLexer
+    [pygments.styles]
+    changelog = pygments_gchangelog:ChangelogStyle
+    """,
     tests_require=tests_require,
     test_suite="nose.collector",
     classifiers=[
