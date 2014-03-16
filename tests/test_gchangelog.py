@@ -1,7 +1,8 @@
-from .utils import TestCase
+from .utils import TestCase, skipIf
 import pygments_gchangelog
 import pygments.lexers
 import pygments.styles
+import os
 
 
 CHANGELOG_TEST1 = """\
@@ -20,6 +21,7 @@ CHANGELOG_TEST1 = """\
 
 class ChangelogTest(TestCase):
 
+    @skipIf(os.getenv('NOPLUGINS'), "Don't test plugin installation")
     def test_install_lexer(self):
         lexer1 = pygments.lexers.get_lexer_by_name('changelog')
         self.assertIsInstance(lexer1, pygments_gchangelog.ChangelogLexer)
