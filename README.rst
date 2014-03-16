@@ -1,6 +1,9 @@
 pygments-gchangelog
 ===================
 
+.. image:: https://travis-ci.org/bacher09/pygments-gchangelog.png?branch=master
+    :target: https://travis-ci.org/bacher09/pygments-gchangelog
+
 Pygments lexer and style for Gentoo Portage's `changelog files`__.
 
 Installation
