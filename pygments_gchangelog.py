@@ -111,10 +111,10 @@ class ChangelogLexer(RegexLexer):
     }
 
 
-class ChangelogHtmlFormater(HtmlFormatter):
+class DecoratedHtmlFormater(HtmlFormatter):
     "Pygments html changelog formater"
 
-    def _format_lines(self, tokensource):
+    def _format_lines(self, tokensource):  # pragma: nocover
         """
         Copyed from pygments source litle modified.
         """
@@ -173,6 +173,12 @@ class ChangelogHtmlFormater(HtmlFormatter):
             yield 1, line + (lspan and '</span>') + lsep
 
     def token_decorate(self, token, value):
+        return value
+
+
+class ChangelogHtmlFormater(DecoratedHtmlFormater):
+
+    def token_decorate(self, token, value):
         if token == Link:
             value = '<a href="{0}" rel="nofollow">{0}</a>'.format(value)
         elif token == Bug:
@@ -183,11 +189,7 @@ class ChangelogHtmlFormater(HtmlFormatter):
                 link = bugs_url_template.format(num)
                 value = '<a href="{1}" class="defcolor">{0}</a>'. \
                     format(value, link)
-        elif token == Email:
-            name, domain = value.split('@')
-            value = '<a href="{1}" class="defcolor">{0}</a>'. \
-                format(name, ciavc_link(name))
-        return value
+        return super(ChangelogHtmlFormater, self).token_decorate(token, value)
 
 
 class ChangelogStyle(Style):

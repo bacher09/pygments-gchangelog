@@ -9,7 +9,7 @@ CHANGELOG_TEST1 = """\
 #  Comment
 
   12 Mar 2014; John Doe <john@doe.com> some-1.0.0-r1.ebuild:
-  Fix bug #10000
+  Fix bug #10000. More info http://www.somesite.org/
 
 *some-1.0.0-r1 (19 Jan 2014)
 
@@ -42,10 +42,14 @@ class ChangelogTest(TestCase):
         self.assertIn((pygments_gchangelog.Date, "19 Jan 2014"), tokens)
 
     def test_latest_message(self):
-        message_group = pygments_gchangelog \
-            .latest_message_group(CHANGELOG_TEST1)
-        latest_message = pygments_gchangelog.tokens_to_text(message_group)
+        latest_message = pygments_gchangelog \
+            .latest_message(CHANGELOG_TEST1)
         self.assertIn("12 Mar 2014", latest_message)
         self.assertIn("Fix bug #10000", latest_message)
         self.assertNotIn("19 Jan 2014", latest_message)
         self.assertNotIn("Revbump", latest_message)
+
+    def test_changelog_formater(self):
+        highlighted_changelog = pygments_gchangelog \
+            .changelog_highlight(CHANGELOG_TEST1)
+        self.assertIn("bugs.gentoo.org", highlighted_changelog)
