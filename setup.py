@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from setuptools import setup, find_packages
+import os.path
 import sys
 
 
@@ -19,13 +20,20 @@ tests_require = [
 ]
 
 
+ROOT_PATH = os.path.dirname(__file__)
+with open(os.path.join(ROOT_PATH, "README.rst")) as f:
+    long_description = f.read()
+
+
 if lt27():
     tests_require.append('unittest2')
 
 
 setup(
     name='pygments-gchangelog',
-    description='Gentoo changelog lexer for pygments',
+    description='Pygments lexer and style for Gentoo ChangeLog',
+    long_description=long_description,
+    url="https://github.com/bacher09/pygments-gchangelog",
     py_modules=['pygments_gchangelog'],
     install_requires=[
         'pygments'
@@ -56,7 +64,6 @@ setup(
     platforms='any',
     author='Slava Bacherikov',
     author_email='slava@bacherikov.org.ua',
-    keywords=["pygments", "lexer", "changelog"],
+    keywords=["pygments", "lexer", "changelog", "gentoo"],
     version="0.1"
 )
-
