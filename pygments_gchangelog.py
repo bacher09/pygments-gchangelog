@@ -281,6 +281,9 @@ def latest_message_group(text):
 
 
 def latest_group_messages_group(text):
+    """Args:
+        text - changelog text
+    Returns: return latest message group with version group"""
     groups = []
     for group_type, group in group_tokens(text):
         if group_type == 'version':
@@ -299,10 +302,7 @@ def tokensgroup_to_toknes(groups):
 
 def tokens_to_text(lex):
     "Convert tokenized input to text"
-    mystr = ''
-    for token, value in lex:
-        mystr += value
-    return mystr
+    return ''.join(value for token, value in lex)
 
 
 def latest_message(text):
