@@ -8,6 +8,9 @@ import re
 from collections import deque
 
 
+__version__ = "0.1"
+
+
 DATE_RE = r'\d\d? [A-Z][a-z]{2} \d{4}'
 EMAIL_RE = r'[\w\.\-\+]+@(?:[\w\-]+\.)+\w+'
 LINK_RE = r'https?:\/\/(?:[\w\-]+\.)+\w+(:?\/[\w\/\.\-\_\+\&\%\?#=]+)?'
