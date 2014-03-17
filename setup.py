@@ -65,5 +65,5 @@ setup(
     author='Slava Bacherikov',
     author_email='slava@bacherikov.org.ua',
     keywords=["pygments", "lexer", "changelog", "gentoo"],
-    version="0.1"
+    version="0.2"
 )

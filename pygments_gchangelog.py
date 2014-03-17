@@ -8,7 +8,7 @@ import re
 from collections import deque
 
 
-__version__ = "0.1"
+__version__ = "0.2"
 
 
 DATE_RE = r'\d\d? [A-Z][a-z]{2} \d{4}'
