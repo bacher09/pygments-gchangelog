@@ -6,3 +6,5 @@ venv/
 nosetests.xml
 cover/
 .tox
+build/
+dist/
